@@ -1,0 +1,43 @@
+//----- INFORME OS ANOS DE INICIO E FIM DA TABELA CALENDARIO
+Let vYearStart = 2022;
+Let vYearEnd = 2022;
+
+
+//------ INTERVALO TEMPORARIO DE DATAS
+Let vDateStart = num('01/01/'& $(vYearStart));
+Let vDateEnd = num('31/12/'& $(vYearEnd));
+TempCalender:
+Load
+	$(vDateStart) + IterNo() -1 as Num,
+	Date($(vDateStart) + IterNo() - 1) as Date,
+	1 + IterNo() -1 as  Sequency
+	AutoGenerate 1 While $(vDateStart) + IterNo() -1 <= $(vDateEnd);
+
+
+//------ CALENDARIO
+dCalendario:
+load
+	Sequency as  Id,
+	Date as Data,
+	Day(Date) as Dia,
+	Ceil(Month(Date)) as Mes,
+	Year(Date)  as Ano,
+	Month(Date) as nomeMes,
+	Left(Month(Date),3) as mesAbrev,
+	Ceil(Month(Date)/3) as Trimestre,
+	Ceil(Month(Date)/6) as Semestre,
+    Date(Monthstart(Date) , 'MMM/YYYY' ) as nomeMesAno,
+    Ceil(Month(Date))&Year(Date) as numMesAno,
+    Date(Ceil(Monthstart(Date)) , 'MM/YYYY' ) as mesAno,
+   	Left(Month(Date),3) & '/' & Year(Date) as mesAbrevAno,
+	Left(Month(Date),3) & '/' & Right(Year(Date),2) as mesAnoAbrev,
+   	Week(Date) as Semana
+resident TempCalender
+Order by Date ASC;
+
+
+// ----- EXCLUIR TABELA TEMPORARIA
+drop table TempCalender;
+
+
+
